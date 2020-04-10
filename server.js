@@ -4,6 +4,11 @@ const cors = require('cors');
 
 const app = express();
 
+const db = require('./app/models');
+db.sequelize.sync({ force:true }).then(() => {
+    console.log('Drop and re-sync database');
+});
+
 var corsOptions = {
     origin: "http://localhost:7001"
 };
@@ -20,6 +25,8 @@ app.use(bodyParser.urlencoded({ extended:true }));
 app.get("/", (req, res) => {
     res.json({ message: "Welcome to paparazi app with nodejs"});
 });
+
+require("./app/routes/dotaheroes.routes")(app);
 
 // set port, and listen for requests
 const PORT = process.env.PORT || 7000;
